@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
 import java.util.logging.Logger;
 
 
@@ -21,6 +22,11 @@ public class NamenodeController {
 
     protected Logger logger = Logger.getLogger(NamenodeController.class.getName());
 
+
+    @GetMapping(value = "/test")
+    public String getTest(){
+        return namenodeService.getTest();
+    }
 
     @GetMapping(value = "/**/{fileName}")
     public String downloadFile(HttpServletRequest request, @PathVariable("fileName") String fileName) {

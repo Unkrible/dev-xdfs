@@ -8,13 +8,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
 import java.util.logging.Logger;
 
 @RestController
 public class DatanodeController {
     @Autowired
     protected DatanodeService datanodeService;
-    protected Logger logger = Logger.getLogger(DatanodeController.class.getName());
+//    protected Logger logger = Logger.getLogger(DatanodeController.class.getName());
+
+    @GetMapping(value = "/test")
+    public String getTest(){
+        return "Hello";
+    }
 
     @GetMapping(value="/**/{fileName}")
     @ResponseBody

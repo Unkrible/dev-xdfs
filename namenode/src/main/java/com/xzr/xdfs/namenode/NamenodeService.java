@@ -1,5 +1,6 @@
 package com.xzr.xdfs.namenode;
 
+import com.xzr.xdfs.namenode.namespace.FileNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -7,14 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
 public class NamenodeService {
 
     @Autowired
-    @LoadBalanced
     protected RestTemplate restTemplate;
+
+    protected FileNode rootNode = new FileNode("/");
 
     @Value(value="${block.block-size:${block.default-size}}")
     public int BLOCK_SIZE;
@@ -24,7 +28,13 @@ public class NamenodeService {
 
     protected Logger logger = Logger.getLogger(NamenodeService.class.getName());
 
-    public boolean uploadFile(MultipartFile file, String directory, String fileName){
+    public String getTest(){
+        return restTemplate.getForObject("http://localhost:2222/test/", String.class);
+    }
+
+    public boolean uploadFile(MultipartFile file, String strPath, String fileName){
+        List<String> fielPath = Arrays.asList(strPath.split("/"));
+        FileNode directory = rootNode.query(fielPath.iterator());
         return true;
     }
 

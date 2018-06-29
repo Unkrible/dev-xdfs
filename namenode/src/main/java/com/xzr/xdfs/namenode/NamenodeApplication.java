@@ -20,7 +20,6 @@ public class NamenodeApplication {
 		SpringApplication.run(NamenodeApplication.class, args);
 	}
 
-	@LoadBalanced    // Make sure to create the load-balanced template
 	@Bean
 	RestTemplate restTemplate() {
 		return new RestTemplate();
