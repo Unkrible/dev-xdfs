@@ -1,6 +1,7 @@
 package cn.xzr.xdfs.datanode;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -41,15 +42,12 @@ public class DatanodeController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value="/**/{fileName}")
-    @ResponseBody
-    public ResponseEntity<?> uploadBlock(HttpServletRequest request,
-                                         @RequestParam("file")MultipartFile file,
-                                         @PathVariable("fileName")String fileName){
+    @PostMapping(value="/")
+    public Boolean uploadBlock(HttpServletRequest request,
+                                         @RequestParam("block") MultipartFile file){
         String directory = request.getRequestURI();
-        String filePath = directory + "/" + fileName;
-        datanodeService.uploadBlock(filePath, file);
-        return ResponseEntity.ok().build();
+        datanodeService.uploadBlock(directory, file);
+        return true;
     }
 
     @ExceptionHandler(Exception.class)

@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.jws.WebService;
 
-@EnableDiscoveryClient
 @EnableEurekaServer
 @SpringBootApplication
 public class NamenodeApplication {

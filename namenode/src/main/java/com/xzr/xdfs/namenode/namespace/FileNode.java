@@ -1,11 +1,9 @@
 package com.xzr.xdfs.namenode.namespace;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FileNode {
+    public static final String blockFormat = "%s/%s-%d";
     public enum Type{
         DIRECTORY, FILE;
     }
@@ -29,6 +27,10 @@ public class FileNode {
         this.blocks = null;
     }
 
+    public void setType(FileNode.Type type){
+        this.type = type;
+    }
+
     public FileNode query(Iterator<String> filePath){
         return this.query(filePath, false);
     }
@@ -50,6 +52,17 @@ public class FileNode {
         }
         else{
             return this;
+        }
+    }
+
+    public void addBlock(String block, String dataNode){
+        if(blocks.containsKey(block)){
+            blocks.get(block).add(dataNode);
+        }
+        else{
+            LinkedList<String> dataNodes = new LinkedList<>();
+            dataNodes.add(dataNode);
+            blocks.put(block, dataNodes);
         }
     }
 }

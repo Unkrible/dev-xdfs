@@ -3,6 +3,7 @@ package com.xzr.xdfs.namenode;
 import com.netflix.appinfo.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.eureka.server.event.EurekaInstanceRegisteredEvent;
+import org.springframework.cloud.netflix.eureka.server.event.EurekaServerStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +72,13 @@ public class NamenodeController {
     public void listen(EurekaInstanceRegisteredEvent event) {
         InstanceInfo instanceInfo = event.getInstanceInfo();
         String dataNodeUrl = instanceInfo.getHomePageUrl();
-        System.err.println(dataNodeUrl + "进行注册");
+        dataNodeUrl = dataNodeUrl.substring(0, dataNodeUrl.length()-1);
+        System.err.println(dataNodeUrl + " register event");
+        namenodeService.registerDataNode(dataNodeUrl);
+    }
+
+    @EventListener
+    public void listen(EurekaServerStartedEvent event){
+        namenodeService.init();
     }
 }
