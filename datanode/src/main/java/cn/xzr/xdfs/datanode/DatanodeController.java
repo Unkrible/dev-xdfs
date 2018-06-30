@@ -35,17 +35,18 @@ public class DatanodeController {
 
     @DeleteMapping(value="/**/{fileName}")
     @ResponseBody
-    public ResponseEntity<?> deleteBlock(HttpServletRequest request, @PathVariable("fileName") String fileName){
+    public Boolean deleteBlock(HttpServletRequest request, @PathVariable("fileName") String fileName){
         String directory = request.getRequestURI();
         String filePath = directory + "/" + fileName;
         datanodeService.deleteBlock(filePath);
-        return ResponseEntity.ok().build();
+        return true;
     }
 
     @PostMapping(value="/")
     public Boolean uploadBlock(HttpServletRequest request,
                                          @RequestParam("block") MultipartFile file){
         String directory = request.getRequestURI();
+        file.getName();
         datanodeService.uploadBlock(directory, file);
         return true;
     }

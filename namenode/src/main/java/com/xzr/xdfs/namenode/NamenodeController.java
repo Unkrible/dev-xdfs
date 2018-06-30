@@ -5,13 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.eureka.server.event.EurekaInstanceRegisteredEvent;
 import org.springframework.cloud.netflix.eureka.server.event.EurekaServerStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
 import java.util.logging.Logger;
 
 
@@ -30,10 +30,11 @@ public class NamenodeController {
     }
 
     @GetMapping(value = "/**/{fileName}")
-    public String downloadFile(HttpServletRequest request, @PathVariable("fileName") String fileName) {
+    public ResponseEntity<Resource> downloadFile(HttpServletRequest request, @PathVariable("fileName") String fileName) {
         String directory = request.getRequestURI();
         logger.info("downloadFile() invoked: for " + directory + "/" + fileName);
-        return directory + "#" + fileName;
+        Resource resource = namenodeService.downloadFile(directory, fileName);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, fileName).body(resource);
     }
 
     @PostMapping(value = "/**/{fileName}")

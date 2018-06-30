@@ -11,7 +11,7 @@ public class FileNode {
     protected String name;
     protected FileNode.Type type;
     protected Map<String, FileNode> children;
-    protected Map<String, List<String>> blocks;
+    protected List<BlockNode> blocks;
 
     public FileNode(String name){
         this.name = name;
@@ -55,14 +55,24 @@ public class FileNode {
         }
     }
 
-    public void addBlock(String block, String dataNode){
-        if(blocks.containsKey(block)){
-            blocks.get(block).add(dataNode);
+    public List<BlockNode> getBlocks(){
+        return this.blocks;
+    }
+
+    public void addBlock(String block, String dataNode, int size){
+        if(blocks == null)
+            blocks = new LinkedList<>();
+
+        for(BlockNode each : blocks){
+            if(each.getName().equals(block)){
+                each.getDataNodes().add(dataNode);
+                return;
+            }
         }
-        else{
-            LinkedList<String> dataNodes = new LinkedList<>();
-            dataNodes.add(dataNode);
-            blocks.put(block, dataNodes);
-        }
+
+        List<String> dataNodes = new LinkedList<>();
+        dataNodes.add(dataNode);
+        BlockNode blockNode = new BlockNode(block, dataNodes, size);
+        blocks.add(blockNode);
     }
 }
